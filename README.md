@@ -242,8 +242,37 @@ Contributions welcome! Please:
 4. Run `cargo test && cargo clippy`
 5. Submit a pull request
 
+## Fork Changes (v1.1.0)
+
+This is a fork of [m0n0x41D/anthropic-proxy-rs](https://github.com/m0n0x41D/anthropic-proxy-rs) with 9 patches for local LLM thinking mode support.
+
+### Patches
+
+| ID | File | Description |
+|----|------|-------------|
+| A | models/openai.rs | `chat_template_kwargs` field in `OpenAIChatRequest` |
+| B | models/openai.rs | `Delta.reasoning` serde alias for `reasoning_content` |
+| C | models/openai.rs | `ChoiceMessage.reasoning` field for non-streaming |
+| D | models/anthropic.rs | `ResponseContent::Thinking` signature field |
+| E | models/anthropic.rs | `ContentBlockStart::Thinking` signature field |
+| F | transform.rs | `chat_template_kwargs` injection into upstream request |
+| G | transform.rs | `reasoning_content` mapping in non-streaming response |
+| H | proxy.rs | SSE thinking block `signature` field |
+| I | transform.rs | `SystemPrompt::Multiple` message merge |
+
+### Tested
+
+- Claude Agent SDK v0.1.44 (5/5 PASS)
+- Backend: Qwen3.5-35B-A3B (Q8_K_XL) via llama-server
+- Pipeline: `Claude Code / Agent SDK -> anthropic-proxy (:3033/:3034) -> llama-server (:8085)`
+
+### Use Case
+
+Run Claude Code or Claude Agent SDK applications against local LLMs that support thinking mode (Qwen3.5, etc.) without cloud API dependency.
+
 ## Links
 
+- [Original Repository](https://github.com/m0n0x41D/anthropic-proxy-rs)
 - [Anthropic API Documentation](https://docs.anthropic.com/)
 - [OpenRouter Documentation](https://openrouter.ai/docs)
 - [Rust Documentation](https://doc.rust-lang.org/)
