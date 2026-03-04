@@ -20,6 +20,8 @@ pub struct OpenAIRequest {
     pub tools: Option<Vec<Tool>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_choice: Option<Value>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chat_template_kwargs: Option<Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -112,6 +114,9 @@ pub struct ChoiceMessage {
     pub content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_calls: Option<Vec<ToolCall>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(alias = "reasoning_content")]
+    pub reasoning: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -150,6 +155,7 @@ pub struct Delta {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_calls: Option<Vec<DeltaToolCall>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(alias = "reasoning_content")]
     pub reasoning: Option<String>,
 }
 

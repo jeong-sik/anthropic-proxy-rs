@@ -144,6 +144,8 @@ pub enum ResponseContent {
         #[serde(rename = "type")]
         content_type: String,
         thinking: String,
+        #[serde(default)]
+        signature: String,
     },
 }
 
@@ -196,7 +198,7 @@ pub enum ContentBlockStart {
     #[serde(rename = "tool_use")]
     ToolUse { id: String, name: String },
     #[serde(rename = "thinking")]
-    Thinking { thinking: String },
+    Thinking { thinking: String, #[serde(default)] signature: String },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

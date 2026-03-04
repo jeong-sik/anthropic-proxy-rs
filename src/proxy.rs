@@ -214,7 +214,8 @@ fn create_sse_stream(
                                                     "index": content_index,
                                                     "content_block": {
                                                         "type": "thinking",
-                                                        "thinking": ""
+                                                        "thinking": "",
+                                                        "signature": ""
                                                     }
                                                 });
                                                 let sse_data = format!("event: content_block_start\ndata: {}\n\n",

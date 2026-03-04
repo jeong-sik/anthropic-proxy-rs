@@ -43,15 +43,18 @@ pub fn anthropic_to_openai(
                 });
             }
             anthropic::SystemPrompt::Multiple(messages) => {
-                for msg in messages {
-                    openai_messages.push(openai::Message {
-                        role: "system".to_string(),
-                        content: Some(openai::MessageContent::Text(msg.text)),
-                        tool_calls: None,
-                        tool_call_id: None,
-                        name: None,
-                    });
-                }
+                let merged: String = messages
+                    .into_iter()
+                    .map(|m| m.text)
+                    .collect::<Vec<_>>()
+                    .join("\n\n");
+                openai_messages.push(openai::Message {
+                    role: "system".to_string(),
+                    content: Some(openai::MessageContent::Text(merged)),
+                    tool_calls: None,
+                    tool_call_id: None,
+                    name: None,
+                });
             }
         }
     }
@@ -88,6 +91,12 @@ pub fn anthropic_to_openai(
         }
     });
 
+    let chat_template_kwargs = if has_thinking {
+        Some(json!({"enable_thinking": true}))
+    } else {
+        None
+    };
+
     Ok(openai::OpenAIRequest {
         model,
         messages: openai_messages,
@@ -98,6 +107,7 @@ pub fn anthropic_to_openai(
         stream: req.stream,
         tools,
         tool_choice: None,
+        chat_template_kwargs,
     })
 }
 
@@ -230,6 +240,17 @@ pub fn openai_to_anthropic(
         .ok_or_else(|| ProxyError::Transform("No choices in response".to_string()))?;
 
     let mut content = Vec::new();
+
+    // Add thinking content if present (reasoning_content from OpenAI response)
+    if let Some(reasoning) = &choice.message.reasoning {
+        if !reasoning.is_empty() {
+            content.push(anthropic::ResponseContent::Thinking {
+                content_type: "thinking".to_string(),
+                thinking: reasoning.clone(),
+                signature: String::new(),
+            });
+        }
+    }
 
     // Add text content if present
     if let Some(text) = &choice.message.content {
