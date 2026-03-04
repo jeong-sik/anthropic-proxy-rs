@@ -1,11 +1,11 @@
 [package]
 name = "anthropic-proxy"
-version = "1.0.1"
+version = "1.1.0"
 edition = "2021"
-authors = ["m0n0x41d <zakutnii.ivan@gmail.com>"]
+authors = ["m0n0x41d <zakutnii.ivan@gmail.com>", "Vincent Yun <yousleepwhen@gmail.com>"]
 description = "High-performance Anthropic API proxy to OpenAI-compatible endpoints"
 license = "MIT"
-repository = "https://github.com/m0n0x41d/anthropic-proxy-rs"
+repository = "https://github.com/jeong-sik/anthropic-proxy-rs"
 
 [[bin]]
 name = "anthropic-proxy"
