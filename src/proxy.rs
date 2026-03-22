@@ -52,7 +52,7 @@ async fn handle_non_streaming(
     tracing::debug!("Request model: {}", openai_req.model);
 
     let mut req_builder = client
-        .post(&config.chat_completions_url())
+        .post(config.chat_completions_url())
         .json(&openai_req)
         .timeout(Duration::from_secs(300));
 
@@ -100,7 +100,7 @@ async fn handle_streaming(
     tracing::debug!("Request model: {}", openai_req.model);
 
     let mut req_builder = client
-        .post(&config.chat_completions_url())
+        .post(config.chat_completions_url())
         .json(&openai_req)
         .timeout(Duration::from_secs(300));
 

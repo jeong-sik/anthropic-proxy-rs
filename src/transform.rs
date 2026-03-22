@@ -150,7 +150,7 @@ fn convert_message(msg: anthropic::Message) -> ProxyResult<Vec<openai::Message>>
                             function: openai::FunctionCall {
                                 name,
                                 arguments: serde_json::to_string(&input)
-                                    .map_err(|e| ProxyError::Serialization(e))?,
+                                    .map_err(ProxyError::Serialization)?,
                             },
                         });
                     }

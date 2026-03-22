@@ -8,6 +8,7 @@ use thiserror::Error;
 
 /// Application-specific errors
 #[derive(Error, Debug)]
+#[allow(dead_code)] // Config, Internal variants reserved for future use
 pub enum ProxyError {
     #[error("Configuration error: {0}")]
     Config(String),
