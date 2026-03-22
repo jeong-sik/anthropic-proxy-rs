@@ -203,6 +203,7 @@ pub enum ContentBlockStart {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
+#[allow(clippy::enum_variant_names)] // variant names match Anthropic SSE event type values
 pub enum Delta {
     #[serde(rename = "text_delta")]
     TextDelta { text: String },

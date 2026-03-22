@@ -15,10 +15,8 @@ pub struct Config {
 impl Config {
     fn load_dotenv(custom_path: Option<PathBuf>) -> Option<PathBuf> {
         if let Some(path) = custom_path {
-            if path.exists() {
-                if let Ok(_) = dotenvy::from_path(&path) {
-                    return Some(path);
-                }
+            if path.exists() && dotenvy::from_path(&path).is_ok() {
+                return Some(path);
             }
             eprintln!("⚠️  WARNING: Custom config file not found: {}", path.display());
         }
@@ -27,27 +25,19 @@ impl Config {
             return Some(path);
         }
 
-        if let Some(home) = env::var("HOME").ok() {
+        if let Ok(home) = env::var("HOME") {
             let home_config = PathBuf::from(home).join(".anthropic-proxy.env");
-            if home_config.exists() {
-                if let Ok(_) = dotenvy::from_path(&home_config) {
-                    return Some(home_config);
-                }
+            if home_config.exists() && dotenvy::from_path(&home_config).is_ok() {
+                return Some(home_config);
             }
         }
 
         let etc_config = PathBuf::from("/etc/anthropic-proxy/.env");
-        if etc_config.exists() {
-            if let Ok(_) = dotenvy::from_path(&etc_config) {
-                return Some(etc_config);
-            }
+        if etc_config.exists() && dotenvy::from_path(&etc_config).is_ok() {
+            return Some(etc_config);
         }
 
         None
-    }
-
-    pub fn from_env() -> Result<Self> {
-        Self::from_env_with_path(None)
     }
 
     pub fn from_env_with_path(custom_path: Option<PathBuf>) -> Result<Self> {
